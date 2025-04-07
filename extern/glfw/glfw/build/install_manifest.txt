@@ -1,0 +1,8 @@
+D:/OpenGL/glfw-3.4/build/instal/lib/libglfw3.a
+D:/OpenGL/glfw-3.4/build/instal/include/GLFW/glfw3.h
+D:/OpenGL/glfw-3.4/build/instal/include/GLFW/glfw3native.h
+D:/OpenGL/glfw-3.4/build/instal/lib/cmake/glfw3/glfw3Config.cmake
+D:/OpenGL/glfw-3.4/build/instal/lib/cmake/glfw3/glfw3ConfigVersion.cmake
+D:/OpenGL/glfw-3.4/build/instal/lib/cmake/glfw3/glfw3Targets.cmake
+D:/OpenGL/glfw-3.4/build/instal/lib/cmake/glfw3/glfw3Targets-noconfig.cmake
+D:/OpenGL/glfw-3.4/build/instal/lib/pkgconfig/glfw3.pc
