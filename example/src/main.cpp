@@ -3,6 +3,7 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include <iostream>
+import PE2D.engine;
 
 #ifdef DEBUG_MODE
 #define DEBUG(x) std::cout << x << std::endl

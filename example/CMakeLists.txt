@@ -49,5 +49,5 @@ target_include_directories(example PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../extern/imgui/imgui/backends
     ${CMAKE_CURRENT_SOURCE_DIR}/../extern/glfw/glfw/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../extern/glad/include
-	${CMAKE_CURRENT_SOURCE_DIR}/../include
+	${CMAKE_CURRENT_SOURCE_DIR}/../PE2D/modules
 )
