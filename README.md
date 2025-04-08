@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # PhysicalEngine2D
 ## About
 - A 2D physics engine written in C++
@@ -38,6 +37,4 @@ cmake ..
 make
 make install
 ```
-=======
-# PhysicalEngine2D
->>>>>>> c6a59b52c08a8c172140b74e61d5d5a7aa813cd4
+
