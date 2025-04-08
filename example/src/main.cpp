@@ -4,7 +4,7 @@
 #include <imgui_impl_opengl3.h>
 #include <iostream>
 
-#ifdef DEBUG
+#ifdef DEBUG_MODE
 #define DEBUG(x) std::cout << x << std::endl
 #else
 #define DEBUG(x)

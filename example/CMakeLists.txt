@@ -9,7 +9,7 @@ file(GLOB ResourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/res/fonts/*.ttf)
 file(COPY ${ResourceFiles} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/res/fonts)
 
 add_compile_definitions(
-    -DDEBUG
+    -DDEBUG_MODE
 )
 # 设置example
 set(EXAMPLE_SOURCE_FILES 
@@ -39,6 +39,9 @@ target_link_libraries(example PRIVATE glad)
 
 # 链接 PE2D 库
 target_link_libraries(example PRIVATE PE2D)
+
+# 链接 GLM 库
+target_compile_definitions(example PRIVATE glm)
 
 # 为可执行文件添加头文件搜索路径
 target_include_directories(example PRIVATE
