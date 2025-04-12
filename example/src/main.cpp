@@ -3,7 +3,7 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 #include <iostream>
-import PE2D.engine;
+#include <PhysicalEngine2D.hpp>
 
 #ifdef DEBUG_MODE
 #define DEBUG(x) std::cout << x << std::endl
@@ -73,6 +73,11 @@ int main()
 	// 设置字体
 	font = io.Fonts->AddFontFromFileTTF("res/fonts/Kingnammm-Maiyuan-II-Regular-2.ttf", 16.0f, NULL, io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
 
+	PE2D::World world(9.80,0.03);
+	unsigned int id = PE2D::RigidBody::makeRigidBody();
+	world.addObject(id);
+	auto obj = PE2D::Object::ID_Map[id];
+	obj->applyForce(PE2D::Vector2D(0,9),obj->getCentroid());
 	// 主循环
 	while (!glfwWindowShouldClose(window))
 	{
@@ -85,11 +90,12 @@ int main()
 		ImGui::PushFont(font);
 		ImGui::Begin("Hello, world!");
 		ImGui::Text("This is some useful text.");
-		ImGui::Text("Window size: %d x %d", window_size.WINDWOW_WIDTH, window_size.WINDOW_HEIGHT);
+		ImGui::Text("Obj pos: %d x %d",obj->getPosition().x(), obj->getPosition().y());
 		ImGui::End();
 		ImGui::PopFont();
 		// 渲染 ImGui
 		ImGui::Render();
+		world.update();
 		int display_w, display_h;
 		glfwGetFramebufferSize(window, &display_w, &display_h);
 		glViewport(0, 0, display_w, display_h);

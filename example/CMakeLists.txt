@@ -2,11 +2,16 @@ cmake_minimum_required(VERSION 3.20)
 
 project(example LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 20)
 
 #复制资源文件到输出目录
 file(GLOB ResourceFiles ${CMAKE_CURRENT_SOURCE_DIR}/res/fonts/*.ttf)
 file(COPY ${ResourceFiles} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/res/fonts)
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../extern/glfw/glfw/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../extern/glad/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../PE2D/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../extern/imgui/imgui)
 
 add_compile_definitions(
     -DDEBUG_MODE
@@ -49,5 +54,5 @@ target_include_directories(example PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../extern/imgui/imgui/backends
     ${CMAKE_CURRENT_SOURCE_DIR}/../extern/glfw/glfw/include
     ${CMAKE_CURRENT_SOURCE_DIR}/../extern/glad/include
-	${CMAKE_CURRENT_SOURCE_DIR}/../PE2D/modules
+	${CMAKE_CURRENT_SOURCE_DIR}/../PE2D/include
 )
