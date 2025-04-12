@@ -31,7 +31,15 @@ namespace PE2D {
 		shapeType = ShapeType::POLYGON;
 		pos = getCentroid();
 	}
-
+	Polygon::Polygon(const std::vector<Vector2D>&& vertices) : vertices(vertices) {
+		// 检查多边形的顶点数量是否大于等于3
+		if (vertices.size() < 3) {
+			throw std::invalid_argument("A polygon must have at least 3 vertices.");
+		}
+		// 设置形状类型为多边形
+		shapeType = ShapeType::POLYGON;
+		pos = getCentroid();
+	}
 	float Polygon::area() const {
 		float area = 0.0f;
 		int n = vertices.size();
@@ -77,5 +85,4 @@ namespace PE2D {
 		// 胶囊体的面积 = 圆的面积 + 矩形的面积
 		return 2 * static_cast<float>(PI) * radius * radius + height * (2 * radius);
 	}
-
 }

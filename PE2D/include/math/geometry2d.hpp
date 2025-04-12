@@ -28,12 +28,12 @@ namespace PE2D {
 		bool isCapsule() const { return shapeType == ShapeType::CAPSULE; }
 		bool isUnknown() const { return shapeType == ShapeType::UNKNOWN; }
 		virtual Vector2D getCentroid() const { return Vector2D(0.0f, 0.0f); } // 默认实现返回原点
-		virtual const std::vector<Vector2D>& getVertices()const { return std::vector<Vector2D>(); };
-		virtual void setPosition(Vector2D v)=0;
+		virtual const std::vector<Vector2D> getVertices()const { return std::vector<Vector2D>(); };
+		virtual void setPosition(Vector2D v) = 0;
 		virtual Vector2D getPosition() { return pos; }
 		virtual void rotate(const Matrix3x3& mat) {};
 	protected:
-		Vector2D pos=Vector2D(0,0);
+		Vector2D pos = Vector2D(0, 0);
 		ShapeType shapeType = ShapeType::UNKNOWN;
 	};
 
@@ -42,9 +42,9 @@ namespace PE2D {
 	public:
 		Triangle(const Vector2D& p1, const Vector2D& p2, const Vector2D& p3);
 		float area() const override;
-		const std::vector<Vector2D>& getVertices() const { return points; }
+		const std::vector<Vector2D> getVertices() const { return points; }
 		Vector2D getCentroid() {
-			return (points[0]+points[1]+points[2])/3;
+			return (points[0] + points[1] + points[2]) / 3;
 		}
 		void setPosition(Vector2D v) {
 			Vector2D dV = v - pos;
@@ -66,8 +66,9 @@ namespace PE2D {
 	class Polygon : public Shape {
 	public:
 		Polygon(const std::vector<Vector2D>& vertices);
+		Polygon(const std::vector<Vector2D>&& vertices);
 		float area() const override;
-		const std::vector<Vector2D>& getVertices() const { return vertices; }
+		const std::vector<Vector2D> getVertices() const { return vertices; }
 		Vector2D getCentroid() {
 			if (vertices.size() < 3) {
 				std::cerr << "多边形最少得包含3个顶点" << std::endl;
@@ -91,7 +92,6 @@ namespace PE2D {
 			cx /= (6.0f * area);
 			cy /= (6.0f * area);
 			return Vector2D(cx, cy);
-
 		}
 		void setPosition(Vector2D v) {
 			Vector2D dV = v - pos;
@@ -115,11 +115,11 @@ namespace PE2D {
 		float area() const override;
 		Vector2D getTopLeft() const { return topLeft; }
 		Vector2D getBottomRight() const { return bottomRight; }
-		const std::vector<Vector2D>& getVertices() const { 
+		const std::vector<Vector2D> getVertices() const {
 			std::vector<Vector2D> v;
-			v.push_back(Vector2D(topLeft.x(),bottomRight.y()));
+			v.push_back(Vector2D(topLeft.x(), bottomRight.y()));
 			v.push_back(topLeft);
-			v.push_back(Vector2D(bottomRight.x(),topLeft.y()));
+			v.push_back(Vector2D(bottomRight.x(), topLeft.y()));
 			v.push_back(bottomRight);
 			return v;
 		}

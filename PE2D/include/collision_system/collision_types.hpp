@@ -95,7 +95,8 @@ namespace PE2D {
 		}
 		// º∆À„ AABB
 		static AABB calculateAABB(Shape* shape) {
-			return AABB::AABB(shape);
+			AABB a=AABB(shape);
+			return a;
 		}
 		void setObj_ID(unsigned int id) {
 			Obj_ID = id;

@@ -2,9 +2,10 @@
 #include <map>
 namespace PE2D {
 	//构造函数
-	World::World(Vector2D gravity,float time_step):
-		m_gravity(gravity),m_time_step(time_step) {}
-	World::World():m_gravity(9.80f),m_time_step(0.02){}
+	World::World(Vector2D gravity, float time_step) :
+		m_gravity(gravity), m_time_step(time_step) {
+	}
+	World::World() :m_gravity(0, 9.80f), m_time_step(0.02) {}
 	World::~World() {}
 	void World::addObject(unsigned int id) {
 		if (Object::isValidID(id))
@@ -27,14 +28,14 @@ namespace PE2D {
 		}
 	}
 	void World::update() {
-		//对每个物体的状态进行更新,速度，位置，角速度，旋转等状态进行更新
-		for (unsigned int id : m_Object_IDs) {
-			Object::ID_Map[id]->update(m_time_step);
-		}
 		//对每个物体施加重力
 		for (auto i : m_Object_IDs) {
-			auto obj=Object::ID_Map[i];
-			obj->applyForce(m_gravity * obj->getMass(),obj->getCentroid());
+			auto obj = Object::ID_Map[i];
+			obj->applyForce(m_gravity * obj->getMass(), obj->getCentroid());
+		}
+		//对每个物体的状态进行更新,速度，位置，角速度等状态进行更新
+		for (unsigned int id : m_Object_IDs) {
+			Object::ID_Map[id]->update(m_time_step);
 		}
 		//碰撞处理
 		this->collisionHandle();
@@ -64,9 +65,9 @@ namespace PE2D {
 		}
 		//仔细检测物体与物体碰撞的位置与深度,ID与其碰撞信息
 		std::map<unsigned int, std::vector<std::pair<unsigned int, CollisionInfo>>> CollisionMap;
-		for (auto &i : collisions) {
+		for (auto& i : collisions) {
 			const Shape* shape1 = Object::ID_Map[i.first]->getShape();
-			for (auto &j : i.second) {
+			for (auto& j : i.second) {
 				const Shape* shape2 = Object::ID_Map[j]->getShape();
 				auto coll = CollisionDetector::CheckCollision(*shape1, *shape2);
 				if (coll.has_value())
@@ -74,8 +75,8 @@ namespace PE2D {
 			}
 		}
 		//对产生碰撞的物体应用冲量，更新物体所受的力
-		for (auto &i : CollisionMap) {
-			for (auto &j : i.second) {
+		for (auto& i : CollisionMap) {
+			for (auto& j : i.second) {
 				auto obj1 = Object::ID_Map[i.first];
 				auto obj2 = Object::ID_Map[j.first];
 				//应用冲量，碰撞所产生的冲量

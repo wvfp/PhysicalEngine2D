@@ -108,12 +108,13 @@ namespace PE2D {
 		void calculateInertia();
 		Parameter getParameter();
 		void setWithParameter(const Parameter&);
-		void clearForce() { Force.clear();}
-		void clearImpulse() { Impulse.clear();}
+		void clearForce() { Force.clear(); }
+		void clearImpulse() { Impulse.clear(); }
 		const AABB* getAABB()const { return m_aabb; }
 		Vector2D calTorque();
 		void applyForce(Vector2D f, Vector2D p) {
-			Force.push_back(std::make_pair(f, p));
+			std::pair<Vector2D, Vector2D> a = std::make_pair(f, p);
+			Force.push_back(a);
 		}
 		void applyImpulse(Vector2D i, Vector2D p) {
 			Impulse.push_back(std::make_pair(i, p));
@@ -124,7 +125,7 @@ namespace PE2D {
 		static void removeAllObjFromMap();
 		static void removeObjFromMap(unsigned int);
 		static bool isValidID(unsigned int);
-	private:
+	protected:
 		// Object type (used for object management)
 		ObjectType m_objectType = ObjectType::OT_NONE; // 物体类型
 		AABB* m_aabb = nullptr; //AABB
@@ -151,7 +152,7 @@ namespace PE2D {
 		Vector2D m_Velocity = { 0.0f, 0.0f }; // Velocity of the object 速度
 		Vector2D m_AngularVelocity = { 0.0f, 0.0f }; // Angular velocity of the object 角速度
 		Vector2D m_Force = 0.0f; // Force applied to the object 作用于物体的力
-		Vector2D m_Torque = {0,0}; // Torque applied to the object 作用于物体的力矩
+		Vector2D m_Torque = { 0,0 }; // Torque applied to the object 作用于物体的力矩
 		float m_LinearDamping = 0.0f; // Linear damping 线性阻尼
 		float m_AngularDamping = 0.0f; // Angular damping 角阻尼
 		float m_GravityScale = 1.0f; // Gravity scale 重力缩放

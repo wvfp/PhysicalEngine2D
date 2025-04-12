@@ -10,7 +10,11 @@ namespace PE2D {
 
 	public:
 		// 构造函数
-		Vector2D(float x = 0.0f, float y = 0.0f);
+		Vector2D(float x, float y);
+		Vector2D() :m_x(0), m_y(0) {};
+		Vector2D(const Vector2D& v) noexcept :m_x(v.m_x), m_y(v.m_y) {};
+		Vector2D(const Vector2D&& v)noexcept :m_x(v.m_x), m_y(v.m_y) {};
+		Vector2D(float v) :m_x(v), m_y(v) {};
 		// 获取 x 和 y 分量
 		float x() const { return m_x; }
 		float y() const { return m_y; }
@@ -18,6 +22,16 @@ namespace PE2D {
 		void setX(float x) { m_x = x; }
 		void setY(float y) { m_y = y; }
 		//-Vector2D 的重载
+		Vector2D operator=(const Vector2D&& v)noexcept {
+			m_x = v.m_x;
+			m_y = v.m_y;
+			return *this;
+		}
+		Vector2D operator=(const Vector2D& v) {
+			m_x = v.m_x;
+			m_y = v.m_y;
+			return *this;
+		}
 		Vector2D operator-() const { return Vector2D(-m_x, -m_y); }
 		// 加法重载
 		Vector2D operator+(const Vector2D& other) const;

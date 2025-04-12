@@ -11,7 +11,7 @@ namespace PE2D {
 		m_GravityScale(1.0f), m_LinearDamping(0.0f), m_AngularDamping(0.0f),
 		m_Restitution(0.5f), m_Friction(0.5f), m_Density(1.0f),
 		m_Velocity(0.0f, 0.0f), m_AngularVelocity(0.0f, 0.0f),
-		m_Force(0.0f, 0.0f), m_Torque(Vector2D(0,0)),
+		m_Force(0.0f, 0.0f), m_Torque(Vector2D(0, 0)),
 		m_sleepTime(0.0f), m_sleepThreshold(1e-4f),
 		m_islandPrev(0), m_islandNext(0) {
 		// Add the object to the ID map
@@ -21,16 +21,17 @@ namespace PE2D {
 			ID_Map[m_ID] = std::shared_ptr<Object>(this);
 		m_nextID = getNextID();
 		this->setShape(new Rectangle(Vector2D(0, 1), Vector2D(1, 0)));
-		
-
 	}
 	Object::~Object() {
 		// Remove the object from the ID map
-		ID_Map[m_ID] = nullptr;
-		if (m_shape)
+		if (m_shape) {
 			delete m_shape;
-		if (m_aabb)
+			m_shape = nullptr;
+		}
+		if (m_aabb) {
 			delete m_aabb;
+			m_aabb = nullptr;
+		}
 	}
 	// destructor
 	void Object::destroyObject(unsigned int id) {
@@ -341,8 +342,8 @@ namespace PE2D {
 			return;
 		}
 		if (m_shape->type() == ShapeType::CIRCLE) {
-			m_Intertia = 0.5 * m_Mass * pow(static_cast<Circle*>(m_shape)->getRadius(),2);
-			if(m_Intertia<1e-6)
+			m_Intertia = 0.5 * m_Mass * pow(static_cast<Circle*>(m_shape)->getRadius(), 2);
+			if (m_Intertia < 1e-6)
 				m_InvIntertia = 1.0 / m_Intertia;
 			return;
 		}
@@ -352,7 +353,7 @@ namespace PE2D {
 			float m1 = (PI * r * r / (PI * r * r + 2 * r * h)) * m_Mass;
 			float m2 = m_Mass - m1;
 			m_Intertia = 0.5 * m1 * r * r + (1.0 / 12.0) * m2 * (4 * r * r + h * h);
-			if(m_Intertia<1e-6)
+			if (m_Intertia < 1e-6)
 				m_InvIntertia = 1.0 / m_Intertia;
 			return;
 		}
@@ -370,7 +371,7 @@ namespace PE2D {
 			float term = v1.x() * v1.x() + v1.x() * v2.x() + v2.x() * v2.x() + v1.y() * v1.y() + v1.y() * v2.y() + v2.y() * v2.y();
 			inertia += crossProduct * term;
 		}
-		area *= 0.5f;
+		area = m_shape->area();
 		if (area < 1e-7f) {
 			std::cerr << "The polygon area is zero, cannot compute inertia." << std::endl;
 			return;
@@ -379,8 +380,8 @@ namespace PE2D {
 		m_Intertia = inertia;
 		m_InvIntertia = 1.0 / inertia;
 	}
-	Vector2D Object::calTorque(){
-		float totalTorque=0.0f;
+	Vector2D Object::calTorque() {
+		float totalTorque = 0.0f;
 		// 计算力的力矩贡献
 		for (const auto& [force, applicationPoint] : Force) {
 			Vector2D r = applicationPoint - m_Centroid;
@@ -407,14 +408,14 @@ namespace PE2D {
 			Parm.force += i->first;
 		}
 		//合冲量
-		for (auto i = Impulse.begin(); i !=Impulse.end(); i++) {
+		for (auto i = Impulse.begin(); i != Impulse.end(); i++) {
 			Parm.impulse += i->first;
 		}
 		Parm.velocity = m_Velocity;
 		Parm.angular_velocity = m_AngularVelocity;
 		Parm.position = m_Position;
 		Parm.inertia = m_Intertia;
-		Parm.acceleration = m_Force /m_Mass;
+		Parm.acceleration = m_Force / m_Mass;
 		//计算力矩
 		m_Torque = calTorque();
 		Parm.shape = m_shape;

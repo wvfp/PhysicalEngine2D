@@ -1,10 +1,10 @@
 #include "collision_system/detection/aabb_detection.hpp"
 #include "types/common_types.hpp"
-//ËÄ²æÊ÷
+//å››å‰æ ‘
 namespace PE2D {
-	// Ïòµ±Ç°½Úµã²åÈëÒ»¸ö AABB
+	// å‘å½“å‰èŠ‚ç‚¹æ’å…¥ä¸€ä¸ª AABB
 	void QuadTreeNode::insert(const AABB& aabb) {
-		// Èç¹ûµ±Ç°½ÚµãÒÑ¾­·ÖÁÑ£¬³¢ÊÔ½« AABB ²åÈëµ½ºÏÊÊµÄ×Ó½ÚµãÖĞ
+		// å¦‚æœå½“å‰èŠ‚ç‚¹å·²ç»åˆ†è£‚ï¼Œå°è¯•å°† AABB æ’å…¥åˆ°åˆé€‚çš„å­èŠ‚ç‚¹ä¸­
 		if (m_nodes[0] != nullptr) {
 			int index = getIndex(aabb);
 			if (index != -1) {
@@ -13,10 +13,10 @@ namespace PE2D {
 			}
 		}
 
-		// Èç¹û²»ÊÊºÏ²åÈëµ½×Ó½ÚµãÖĞ£¬½« AABB ´æ´¢ÔÚµ±Ç°½Úµã
+		// å¦‚æœä¸é€‚åˆæ’å…¥åˆ°å­èŠ‚ç‚¹ä¸­ï¼Œå°† AABB å­˜å‚¨åœ¨å½“å‰èŠ‚ç‚¹
 		m_objects.push_back(aabb.getObj_ID());
 
-		// Èç¹ûµ±Ç°½Úµã´æ´¢µÄ AABB ÊıÁ¿³¬¹ı×î´óÔÊĞíÊıÁ¿£¬ÇÒÎ´´ïµ½×î´ó²ã¼¶£¬Ôò½øĞĞ·ÖÁÑ
+		// å¦‚æœå½“å‰èŠ‚ç‚¹å­˜å‚¨çš„ AABB æ•°é‡è¶…è¿‡æœ€å¤§å…è®¸æ•°é‡ï¼Œä¸”æœªè¾¾åˆ°æœ€å¤§å±‚çº§ï¼Œåˆ™è¿›è¡Œåˆ†è£‚
 		if (m_objects.size() > m_maxObjects && m_level < m_maxLevel) {
 			if (m_nodes[0] == nullptr) {
 				split();
@@ -26,7 +26,7 @@ namespace PE2D {
 			while (i < m_objects.size()) {
 				int index = getIndex(*Object::ID_Map[m_objects[i]]->getAABB());
 				if (index != -1) {
-					// Èç¹û AABB ÊÊºÏ²åÈëµ½×Ó½ÚµãÖĞ£¬½«Æä´Óµ±Ç°½ÚµãÒÆ³ı²¢²åÈëµ½×Ó½Úµã
+					// å¦‚æœ AABB é€‚åˆæ’å…¥åˆ°å­èŠ‚ç‚¹ä¸­ï¼Œå°†å…¶ä»å½“å‰èŠ‚ç‚¹ç§»é™¤å¹¶æ’å…¥åˆ°å­èŠ‚ç‚¹
 					m_nodes[index]->insert(*Object::ID_Map[m_objects[i]]->getAABB());
 					m_objects.erase(m_objects.begin() + i);
 				}
@@ -37,42 +37,42 @@ namespace PE2D {
 		}
 	}
 
-	// ¼ìË÷ÓëÖ¸¶¨ AABB ¿ÉÄÜÏà½»µÄËùÓĞ AABB µÄË÷Òı
+	// æ£€ç´¢ä¸æŒ‡å®š AABB å¯èƒ½ç›¸äº¤çš„æ‰€æœ‰ AABB çš„ç´¢å¼•
 	std::vector<unsigned int> QuadTreeNode::retrieve(const AABB& aabb) {
 		std::vector<unsigned int> returnObjects;
 		int index = getIndex(aabb);
-		// Èç¹û AABB ÊÊºÏÄ³¸ö×Ó½Úµã£¬µİ¹éµØ´Ó¸Ã×Ó½Úµã¼ìË÷¿ÉÄÜÏà½»µÄ AABB
+		// å¦‚æœ AABB é€‚åˆæŸä¸ªå­èŠ‚ç‚¹ï¼Œé€’å½’åœ°ä»è¯¥å­èŠ‚ç‚¹æ£€ç´¢å¯èƒ½ç›¸äº¤çš„ AABB
 		if (index != -1 && m_nodes[0] != nullptr) {
 			std::vector<unsigned int> childObjects = m_nodes[index]->retrieve(aabb);
 			returnObjects.insert(returnObjects.end(), childObjects.begin(), childObjects.end());
 		}
 
-		// ½«µ±Ç°½Úµã´æ´¢µÄËùÓĞ AABB Ìí¼Óµ½½á¹ûÖĞ
+		// å°†å½“å‰èŠ‚ç‚¹å­˜å‚¨çš„æ‰€æœ‰ AABB æ·»åŠ åˆ°ç»“æœä¸­
 		returnObjects.insert(returnObjects.end(), m_objects.begin(), m_objects.end());
 		return returnObjects;
 	}
 
-	// ½«µ±Ç°½Úµã·ÖÁÑÎªËÄ¸ö×Ó½Úµã
+	// å°†å½“å‰èŠ‚ç‚¹åˆ†è£‚ä¸ºå››ä¸ªå­èŠ‚ç‚¹
 	void QuadTreeNode::split() {
 		float subWidth = m_bounds.getWidth() / 2;
 		float subHeight = m_bounds.getHeight() / 2;
 		float x = m_bounds.getTopLeft().x();
 		float y = m_bounds.getTopLeft().y();
 
-		// ´´½¨ËÄ¸ö×Ó½Úµã£¬·Ö±ğ´ú±íµ±Ç°½ÚµãÇøÓòµÄËÄ¸öÏóÏŞ
+		// åˆ›å»ºå››ä¸ªå­èŠ‚ç‚¹ï¼Œåˆ†åˆ«ä»£è¡¨å½“å‰èŠ‚ç‚¹åŒºåŸŸçš„å››ä¸ªè±¡é™
 		m_nodes[0] = new QuadTreeNode(AABB(Vector2D(x + subWidth, y), Vector2D(x + 2 * subWidth, y + subHeight)), m_level + 1, m_maxLevel, m_maxObjects);
 		m_nodes[1] = new QuadTreeNode(AABB(Vector2D(x, y), Vector2D(x + subWidth, y + subHeight)), m_level + 1, m_maxLevel, m_maxObjects);
 		m_nodes[2] = new QuadTreeNode(AABB(Vector2D(x, y + subHeight), Vector2D(x + subWidth, y + 2 * subHeight)), m_level + 1, m_maxLevel, m_maxObjects);
 		m_nodes[3] = new QuadTreeNode(AABB(Vector2D(x + subWidth, y + subHeight), Vector2D(x + 2 * subWidth, y + 2 * subHeight)), m_level + 1, m_maxLevel, m_maxObjects);
 	}
 
-	// »ñÈ¡Ö¸¶¨ AABB Ó¦¸Ã²åÈëµÄ×Ó½ÚµãË÷Òı
+	// è·å–æŒ‡å®š AABB åº”è¯¥æ’å…¥çš„å­èŠ‚ç‚¹ç´¢å¼•
 	int QuadTreeNode::getIndex(const AABB& aabb) {
 		int index = -1;
 		float verticalMidpoint = m_bounds.getTopLeft().x() + m_bounds.getWidth() / 2;
 		float horizontalMidpoint = m_bounds.getTopLeft().y() + m_bounds.getHeight() / 2;
 
-		// ÅĞ¶Ï AABB Î»ÓÚµ±Ç°½ÚµãÇøÓòµÄÄÄ¸öÏóÏŞ
+		// åˆ¤æ–­ AABB ä½äºå½“å‰èŠ‚ç‚¹åŒºåŸŸçš„å“ªä¸ªè±¡é™
 		bool topQuadrant = (aabb.getTopLeft().y() < horizontalMidpoint && aabb.getBottomRight().y() < horizontalMidpoint);
 		bool bottomQuadrant = (aabb.getTopLeft().y() > horizontalMidpoint);
 

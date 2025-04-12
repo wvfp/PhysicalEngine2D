@@ -4,7 +4,7 @@
 #include "math/math_utils.hpp"
 #include <limits>
 #include <algorithm>
-
+#include <optional>
 namespace PE2D {
 	// 辅助函数声明
 	static float distanceBetweenPoints(const Vector2D& point, const std::vector<Vector2D>& polygon);
@@ -82,20 +82,26 @@ namespace PE2D {
 		if (a.isCircle() && b.isCircle()) {
 			return CircleVsCircle(static_cast<const Circle&>(a), static_cast<const Circle&>(b));
 		}
-		else if (a.isCircle() && b.isPolygon()) {
-			return CircleVsPolygon(static_cast<const Circle&>(a), static_cast<const Polygon&>(b));
+		else if (a.isCircle() && (b.isPolygon() || b.isRectangle() || b.isTriangle())) {
+			Polygon v = Polygon(b.getVertices());
+			return CircleVsPolygon(static_cast<const Circle&>(a), static_cast<const Polygon&>(v));
 		}
-		else if (a.isPolygon() && b.isCircle()) {
-			return PolygonVsCircle(static_cast<const Polygon&>(a), static_cast<const Circle&>(b));
+		else if ((a.isPolygon() || a.isRectangle() || a.isTriangle()) && b.isCircle()) {
+			Polygon v = Polygon(a.getVertices());
+			return PolygonVsCircle(static_cast<const Polygon&>(v), static_cast<const Circle&>(b));
 		}
-		else if (a.isPolygon() && b.isPolygon()) {
-			return PolygonVsPolygon(static_cast<const Polygon&>(a), static_cast<const Polygon&>(b));
+		else if ((a.isPolygon() || a.isRectangle() || a.isTriangle()) && (b.isPolygon() || b.isRectangle() || b.isTriangle())) {
+			Polygon v1 = Polygon(a.getVertices());
+			Polygon v2 = Polygon(b.getVertices());
+			return PolygonVsPolygon(static_cast<const Polygon&>(v1), static_cast<const Polygon&>(v2));
 		}
-		else if (b.isCapsule() && a.isPolygon()) {
-			return CapsuleVsPolygon(static_cast<const Capsule&>(a), static_cast<const Polygon&>(b));
+		else if (a.isCapsule() && (b.isPolygon() || b.isRectangle() || b.isTriangle())) {
+			Polygon v = Polygon(b.getVertices());
+			return CapsuleVsPolygon(static_cast<const Capsule&>(a), static_cast<const Polygon&>(v));
 		}
-		else if (a.isPolygon() && b.isCapsule()) {
-			return CapsuleVsPolygon(static_cast<const Capsule&>(b), static_cast<const Polygon&>(a));
+		else if ((a.isPolygon() || a.isRectangle() || a.isTriangle()) && b.isCapsule()) {
+			Polygon v = Polygon(a.getVertices());
+			return CapsuleVsPolygon(static_cast<const Capsule&>(b), static_cast<const Polygon&>(v));
 		}
 		return std::nullopt; // 未实现的碰撞类型
 	}
